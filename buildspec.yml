@@ -1,4 +1,3 @@
-
 version: 0.2
 
 phases:
@@ -7,7 +6,7 @@ phases:
       - mvn clean install
       - echo Logging in to Amazon ECR...
       - aws --version
-      - REPOSITORY_URI= 021891584996.dkr.ecr.ap-south-1.amazonaws.com 
+      - REPOSITORY_URI=021891584996.dkr.ecr.ap-south-1.amazonaws.com 
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
@@ -26,7 +25,6 @@ phases:
       - echo Writing image definitions file...
       - printf '[{"name":"bootdocker","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo Writing image definitions file...
-      # add your container name ie. ECR repository name which is also known as 
       - DOCKER_CONTAINER_NAME=bootdocker      
       - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo $DOCKER_CONTAINER_NAME
